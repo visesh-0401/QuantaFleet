@@ -78,7 +78,7 @@ Mapped over the actual road network graph of **Mumbai (OSMNX graph dataset)**, Q
 Clone the repository and run the automated start script:
 
 ```bash
-git clone https://github.com/your-username/QuantaFleet.git
+git clone https://github.com/visesh-0401/QuantaFleet.git
 cd QuantaFleet
 ./start.sh
 ```
