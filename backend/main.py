@@ -143,6 +143,13 @@ class GenerateRequest(BaseModel):
 
 @app.get("/")
 def root():
+    index_file = os.path.join(FRONTEND_DIST, "index.html")
+    if os.path.isfile(index_file):
+        return FileResponse(index_file)
+    return {"status": "QuantaFleet API running", "version": "1.0.0"}
+
+@app.get("/api/health")
+def health_check():
     return {"status": "QuantaFleet API running", "version": "1.0.0"}
 
 
