@@ -6,6 +6,7 @@ import asyncio
 import json
 import math
 import os
+import random
 from typing import List, Optional
 from fastapi import FastAPI, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
@@ -34,6 +35,62 @@ except Exception as e:
     G_road_network = None
     G_nodes_list = []
 
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Traffic congestion model
+# ─────────────────────────────────────────────────────────────────────────────
+
+# traffic_level: 0=Free Flow, 1=Moderate, 2=Heavy, 3=Rush Hour
+TRAFFIC_LEVEL_LABELS = ["Free Flow", "Moderate", "Heavy", "Rush Hour"]
+# Min/max congestion multipliers per level (applied to base travel time)
+TRAFFIC_CONGESTION_RANGE = [
+    (0.7, 1.2),   # 0 Free Flow — roads mostly clear
+    (1.0, 1.8),   # 1 Moderate — mixed flow
+    (1.5, 3.0),   # 2 Heavy — significant slowdowns
+    (2.5, 5.0),   # 3 Rush Hour — near-gridlock on arterials
+]
+
+# Current traffic seed (updated when user changes level)
+_traffic_seed = 42
+_traffic_level = 0
+
+
+def apply_traffic_weights(G, traffic_level: int = 0, seed: int = 42):
+    """
+    Overlay traffic-congestion-based travel_time weights on the road graph.
+    Each edge gets a travel_time (seconds) = base_travel_time * congestion_factor.
+    congestion_factor is sampled per-edge from the range for the given traffic level.
+    Also stores raw congestion_factor for heatmap coloring.
+    """
+    if G is None:
+        return
+    rng = random.Random(seed)
+    lo, hi = TRAFFIC_CONGESTION_RANGE[traffic_level]
+    # Precompute speed from maxspeed attribute
+    for u, v, key, data in G.edges(keys=True, data=True):
+        base_length_m = data.get('length', 100)           # meters
+        speed_kph = 40                                     # default urban speed
+        ms = data.get('maxspeed')
+        if isinstance(ms, str):
+            try:
+                speed_kph = float(ms.split()[0])
+            except Exception:
+                pass
+        elif isinstance(ms, (int, float)):
+            speed_kph = float(ms)
+        speed_kph = max(5.0, min(speed_kph, 120.0))
+        base_travel_s = (base_length_m / 1000.0) / (speed_kph / 3600.0)  # seconds
+        congestion = rng.uniform(lo, hi)
+        data['travel_time'] = base_travel_s * congestion
+        data['congestion_factor'] = round(congestion, 3)  # stored for heatmap
+    return G
+
+
+# Apply initial (free-flow) weights on startup
+if G_road_network is not None:
+    apply_traffic_weights(G_road_network, traffic_level=0, seed=_traffic_seed)
+    print("Traffic weights applied (Free Flow)")
+
 app = FastAPI(title="QuantaFleet API", version="1.0.0")
 
 app.add_middleware(
@@ -46,8 +103,6 @@ app.add_middleware(
 # ─────────────────────────────────────────────────────────────────────────────
 # Default scenario: Mumbai metro delivery network
 # ─────────────────────────────────────────────────────────────────────────────
-
-import random
 
 # Mumbai bounding box for random nodes
 LAT_MIN, LAT_MAX = 18.90, 19.25
@@ -131,10 +186,14 @@ class ScenarioConfig(BaseModel):
 
 class OptimizeRequest(BaseModel):
     num_reads: int = 400
+    traffic_level: int = 0   # 0=Free Flow, 1=Moderate, 2=Heavy, 3=Rush Hour
 
 class GenerateRequest(BaseModel):
     num_nodes: int
     num_vehicles: int
+
+class TrafficRequest(BaseModel):
+    traffic_level: int = 0   # 0–3
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -191,9 +250,71 @@ def generate_scenario_api(req: GenerateRequest):
     return {"status": "ok", "node_count": len(nodes), "vehicles": req.num_vehicles}
 
 
+@app.post("/api/traffic/set")
+def set_traffic(req: TrafficRequest):
+    """Update the global traffic congestion level and re-apply weights to the road graph."""
+    global _traffic_level, _traffic_seed
+    level = max(0, min(3, req.traffic_level))
+    _traffic_level = level
+    _traffic_seed = random.randint(0, 999999)  # new seed = fresh random congestion pattern
+    if G_road_network is not None:
+        apply_traffic_weights(G_road_network, traffic_level=level, seed=_traffic_seed)
+    # Reset results so user re-runs with new traffic
+    state["qio_result"] = None
+    state["classical_result"] = None
+    return {
+        "status": "ok",
+        "traffic_level": level,
+        "label": TRAFFIC_LEVEL_LABELS[level],
+        "seed": _traffic_seed,
+    }
+
+
+@app.get("/api/traffic/heatmap")
+def get_traffic_heatmap():
+    """
+    Return a sample of road network edges with their congestion factors
+    for rendering a color-coded overlay on the Leaflet map.
+    Each item: { lat1, lon1, lat2, lon2, congestion_factor }
+    Only returns edges from the bounding box visible in the map for performance.
+    """
+    if G_road_network is None:
+        return {"edges": [], "traffic_level": _traffic_level, "label": TRAFFIC_LEVEL_LABELS[_traffic_level]}
+
+    edges_out = []
+    sample_limit = 600  # Cap for frontend performance
+    all_edges = list(G_road_network.edges(data=True))
+    step = max(1, len(all_edges) // sample_limit)
+    for i, (u, v, data) in enumerate(all_edges):
+        if i % step != 0:
+            continue
+        u_data = G_road_network.nodes[u]
+        v_data = G_road_network.nodes[v]
+        cf = data.get('congestion_factor', 1.0)
+        edges_out.append({
+            "lat1": round(u_data['y'], 6), "lon1": round(u_data['x'], 6),
+            "lat2": round(v_data['y'], 6), "lon2": round(v_data['x'], 6),
+            "congestion": cf,
+        })
+    return {
+        "edges": edges_out,
+        "traffic_level": _traffic_level,
+        "label": TRAFFIC_LEVEL_LABELS[_traffic_level],
+    }
+
+
 @app.post("/api/optimize/quantum")
 def optimize_quantum(req: OptimizeRequest):
     """Run QUBO formulation + SimulatedAnnealingSampler on the current scenario."""
+    global _traffic_level, _traffic_seed
+    # Apply traffic weights if requested level changed
+    level = max(0, min(3, req.traffic_level))
+    if level != _traffic_level:
+        _traffic_level = level
+        _traffic_seed = random.randint(0, 999999)
+        if G_road_network is not None:
+            apply_traffic_weights(G_road_network, traffic_level=level, seed=_traffic_seed)
+
     nodes = state["nodes"]
     cfg = state["config"]
 
@@ -205,8 +326,10 @@ def optimize_quantum(req: OptimizeRequest):
         num_reads=req.num_reads,
     )
 
-    # Enrich with node labels and full road path for frontend
+    # Enrich with node labels, full road path, and ETAs for frontend
     result["route_details"] = _enrich_routes(result["routes"], nodes)
+    result["traffic_level"] = _traffic_level
+    result["traffic_label"] = TRAFFIC_LEVEL_LABELS[_traffic_level]
     state["qio_result"] = result
 
     # Update fleet simulator with the detailed route paths
@@ -229,6 +352,8 @@ def optimize_classical():
     )
 
     result["route_details"] = _enrich_routes(result["routes"], nodes)
+    result["traffic_level"] = _traffic_level
+    result["traffic_label"] = TRAFFIC_LEVEL_LABELS[_traffic_level]
     state["classical_result"] = result
 
     # Update fleet simulator
@@ -312,13 +437,20 @@ def fleet_routes():
 # ─────────────────────────────────────────────────────────────────────────────
 
 def _enrich_routes(routes: List[List[int]], nodes: List[dict]) -> List[dict]:
-    """Attach labels, coordinates, and exact road paths to each route."""
+    """
+    Attach labels, coordinates, exact road paths, and per-stop ETAs to each route.
+    Uses travel_time edge weights (traffic-aware) for ETA; falls back to distance/speed estimate.
+    """
     enriched = []
+    AVG_SPEED_KPH = 35.0  # fallback average speed when no travel_time available
+
     for v_idx, route in enumerate(routes):
         stops = []
-        full_path = [] # list of {lat, lon} for the continuous road
+        full_path = []          # {lat, lon} continuous road geometry
+        path_segments = []      # per-segment { congestion_factors: [] }
         total_dist = 0.0
-        
+        cumulative_eta_s = 0.0  # cumulative travel time in seconds
+
         for i, node_idx in enumerate(route):
             n = nodes[node_idx]
             stop = {
@@ -328,6 +460,7 @@ def _enrich_routes(routes: List[List[int]], nodes: List[dict]) -> List[dict]:
                 "lon": n["lon"],
                 "demand": n.get("demand", 0),
                 "is_depot": n.get("is_depot", False),
+                "eta_min": round(cumulative_eta_s / 60.0, 1),   # cumulative ETA in minutes
             }
             stops.append(stop)
 
@@ -335,27 +468,54 @@ def _enrich_routes(routes: List[List[int]], nodes: List[dict]) -> List[dict]:
                 full_path.append({"lat": n["lat"], "lon": n["lon"]})
             else:
                 prev = nodes[route[i - 1]]
-                
-                # Calculate road path between prev and n
+                seg_travel_s = 0.0
+                seg_congestions = []
+
                 if G_road_network:
                     try:
-                        u = ox.distance.nearest_nodes(G_road_network, X=prev["lon"], Y=prev["lat"])
-                        v = ox.distance.nearest_nodes(G_road_network, X=n["lon"], Y=n["lat"])
-                        shortest_path = nx.shortest_path(G_road_network, u, v, weight='length')
-                        
-                        for p_node in shortest_path[1:]:
+                        u_node = ox.distance.nearest_nodes(G_road_network, X=prev["lon"], Y=prev["lat"])
+                        v_node = ox.distance.nearest_nodes(G_road_network, X=n["lon"], Y=n["lat"])
+                        # Use traffic_time weight for routing (minimises congested travel time)
+                        weight_key = 'travel_time' if nx.get_edge_attributes(G_road_network, 'travel_time') else 'length'
+                        shortest_path = nx.shortest_path(G_road_network, u_node, v_node, weight=weight_key)
+
+                        for k in range(1, len(shortest_path)):
+                            p_node = shortest_path[k]
                             p_data = G_road_network.nodes[p_node]
-                            full_path.append({"lat": p_data['y'], "lon": p_data['x']})
-                            
-                        path_length = nx.shortest_path_length(G_road_network, u, v, weight='length') / 1000.0
-                        total_dist += path_length
+                            full_path.append({"lat": round(p_data['y'], 6), "lon": round(p_data['x'], 6)})
+
+                            # Accumulate travel time for this edge
+                            edge_data = G_road_network.get_edge_data(shortest_path[k-1], p_node)
+                            if edge_data:
+                                # Multiple parallel edges possible — take minimum travel_time
+                                best_edge = min(edge_data.values(), key=lambda d: d.get('travel_time', float('inf')))
+                                seg_travel_s += best_edge.get('travel_time', 0)
+                                seg_congestions.append(best_edge.get('congestion_factor', 1.0))
+
+                        path_length_km = nx.shortest_path_length(G_road_network, u_node, v_node, weight='length') / 1000.0
+                        total_dist += path_length_km
+
+                        # If travel_time not available on graph, estimate from distance
+                        if seg_travel_s == 0:
+                            seg_travel_s = (path_length_km / AVG_SPEED_KPH) * 3600.0
+
+                        cumulative_eta_s += seg_travel_s
+                        # Update the stop's ETA now that we have it
+                        stops[-1]["eta_min"] = round(cumulative_eta_s / 60.0, 1)
+                        # Avg congestion for this leg
+                        stops[-1]["leg_congestion"] = round(sum(seg_congestions) / max(len(seg_congestions), 1), 2) if seg_congestions else 1.0
                         continue
                     except Exception:
                         pass
-                
-                # Fallback straight line
+
+                # Fallback: straight-line distance + average speed
+                seg_dist_km = haversine(prev["lat"], prev["lon"], n["lat"], n["lon"])
+                total_dist += seg_dist_km
+                seg_travel_s = (seg_dist_km / AVG_SPEED_KPH) * 3600.0
+                cumulative_eta_s += seg_travel_s
                 full_path.append({"lat": n["lat"], "lon": n["lon"]})
-                total_dist += haversine(prev["lat"], prev["lon"], n["lat"], n["lon"])
+                stops[-1]["eta_min"] = round(cumulative_eta_s / 60.0, 1)
+                stops[-1]["leg_congestion"] = 1.0
 
         base_name = VEHICLE_NAMES[v_idx % len(VEHICLE_NAMES)]
         enriched.append({
@@ -365,6 +525,7 @@ def _enrich_routes(routes: List[List[int]], nodes: List[dict]) -> List[dict]:
             "stops": stops,
             "path": full_path,
             "distance_km": round(total_dist, 2),
+            "total_eta_min": round(cumulative_eta_s / 60.0, 1),   # total route time
         })
     return enriched
 

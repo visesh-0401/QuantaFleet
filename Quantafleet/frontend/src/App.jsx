@@ -14,9 +14,15 @@ export default function App() {
   const [metrics, setMetrics] = useState(null)
   const [isRunningQIO, setIsRunningQIO] = useState(false)
   const [isRunningClassical, setIsRunningClassical] = useState(false)
-  const [activeRoute, setActiveRoute] = useState(null)  // which vehicle route to highlight
+  const [activeRoute, setActiveRoute] = useState(null)
   const [mapExpanded, setMapExpanded] = useState(false)
   const [pipPos, setPipPos] = useState({ x: 0, y: 0 })
+
+  // Traffic state
+  const [trafficLevel, setTrafficLevel] = useState(0)
+  const [heatmapData, setHeatmapData] = useState(null)
+  const [showHeatmap, setShowHeatmap] = useState(false)
+
   const dragRef = useRef({ isDragging: false, startX: 0, startY: 0, initialX: 0, initialY: 0 })
   const tickRef = useRef(null)
 
@@ -52,13 +58,52 @@ export default function App() {
     if (data.type !== 'none') setRoutes(data)
   }, [])
 
-  const runQuantum = useCallback(async (numReads) => {
+  // Fetch heatmap data from backend
+  const fetchHeatmap = useCallback(async () => {
+    try {
+      const r = await fetch(`${API}/api/traffic/heatmap`)
+      const data = await r.json()
+      setHeatmapData(data)
+    } catch {}
+  }, [])
+
+  // When traffic level changes: tell backend, then refresh heatmap
+  const handleTrafficChange = useCallback(async (level) => {
+    setTrafficLevel(level)
+    // Reset results when traffic changes
+    setQioResult(null)
+    setClassicalResult(null)
+    setRoutes(null)
+    setMetrics(null)
+    setActiveRoute(null)
+    try {
+      await fetch(`${API}/api/traffic/set`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ traffic_level: level }),
+      })
+      // Always refresh heatmap when level changes (even if not visible, pre-load)
+      await fetchHeatmap()
+    } catch (e) {
+      console.error(e)
+    }
+  }, [fetchHeatmap])
+
+  // Toggle heatmap: lazy-fetch on first show
+  const toggleHeatmap = useCallback(async () => {
+    if (!showHeatmap && !heatmapData) {
+      await fetchHeatmap()
+    }
+    setShowHeatmap(v => !v)
+  }, [showHeatmap, heatmapData, fetchHeatmap])
+
+  const runQuantum = useCallback(async (numReads, tLevel) => {
     setIsRunningQIO(true)
     try {
       const r = await fetch(`${API}/api/optimize/quantum`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ num_reads: numReads }),
+        body: JSON.stringify({ num_reads: numReads, traffic_level: tLevel ?? trafficLevel }),
       })
       const data = await r.json()
       setQioResult(data)
@@ -69,7 +114,7 @@ export default function App() {
     } finally {
       setIsRunningQIO(false)
     }
-  }, [fetchMetrics, fetchRoutes])
+  }, [fetchMetrics, fetchRoutes, trafficLevel])
 
   const runClassical = useCallback(async () => {
     setIsRunningClassical(true)
@@ -82,12 +127,13 @@ export default function App() {
       const data = await r.json()
       setClassicalResult(data)
       await fetchMetrics()
+      await fetchRoutes()
     } catch (e) {
       console.error(e)
     } finally {
       setIsRunningClassical(false)
     }
-  }, [fetchMetrics])
+  }, [fetchMetrics, fetchRoutes])
 
   const generateScenario = useCallback(async (numNodes, numVehicles) => {
     try {
@@ -101,7 +147,7 @@ export default function App() {
       setRoutes(null)
       setMetrics(null)
       setActiveRoute(null)
-      
+
       const r = await fetch(`${API}/api/scenario`)
       const data = await r.json()
       setScenario(data)
@@ -154,6 +200,25 @@ export default function App() {
         <div className="topbar-badge">NISQ Era</div>
         <div className="topbar-badge">QUBO Engine</div>
         <div className="topbar-badge">SimQA Solver</div>
+
+        {/* Heatmap toggle in topbar */}
+        <button
+          onClick={toggleHeatmap}
+          style={{
+            padding: '4px 12px',
+            borderRadius: 99,
+            border: `1px solid ${showHeatmap ? 'rgba(239,68,68,0.5)' : 'rgba(0,0,0,0.12)'}`,
+            background: showHeatmap ? 'rgba(239,68,68,0.1)' : 'transparent',
+            color: showHeatmap ? '#ef4444' : 'var(--text-muted)',
+            cursor: 'pointer',
+            fontSize: 12,
+            fontWeight: 600,
+            transition: 'all 0.2s',
+          }}
+        >
+          🌡️ {showHeatmap ? 'Heatmap ON' : 'Heatmap'}
+        </button>
+
         <div className="status-pill">
           <div className="status-dot" />
           Live
@@ -175,6 +240,8 @@ export default function App() {
           onSelectRoute={setActiveRoute}
           routes={routes}
           onGenerateScenario={generateScenario}
+          trafficLevel={trafficLevel}
+          onTrafficChange={handleTrafficChange}
         />
       </aside>
 
@@ -196,6 +263,9 @@ export default function App() {
           onSelectRoute={setActiveRoute}
           qioResult={qioResult}
           classicalResult={classicalResult}
+          trafficLevel={trafficLevel}
+          heatmapData={heatmapData}
+          showHeatmap={showHeatmap}
         />
       </main>
 

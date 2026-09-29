@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SIH26137 | QuantaFleet Idea Presentation</title>
+  <style>
+    :root { --blue:#0070c0; --navy:#17365d; --ink:#1f2937; --muted:#5f6b7a; --line:#c9d7e6; --wash:#f4f9fd; --red:#c0504d; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:#e9eef4; color:var(--ink); font-family:Arial, Helvetica, sans-serif; }
+    .deck { display:grid; gap:26px; padding:26px; }
+    .slide { width:13.333in; height:7.5in; margin:auto; background:#fff; position:relative; overflow:hidden; box-shadow:0 12px 34px #34495e30; page-break-after:always; }
+    .topline { position:absolute; inset:0 0 auto; height:8px; background:var(--blue); }
+    .brand { position:absolute; top:18px; left:28px; font-size:14px; font-weight:700; color:var(--blue); letter-spacing:.3px; }
+    .sih { position:absolute; top:15px; right:27px; color:#455a64; font-size:15px; font-weight:800; letter-spacing:.6px; text-align:right; line-height:1.05; }
+    .sih b { color:var(--blue); font-size:20px; }
+    .title { position:absolute; top:76px; left:54px; font-size:29px; color:var(--navy); font-weight:800; letter-spacing:.2px; }
+    .rule { position:absolute; top:121px; left:54px; width:163px; height:4px; background:var(--red); }
+    .content { position:absolute; left:54px; right:54px; top:151px; bottom:58px; }
+    .footer { position:absolute; bottom:0; left:0; right:0; height:31px; border-top:1px solid #d5dce5; background:#fafcff; color:#6b7280; font-size:10px; display:flex; align-items:center; justify-content:center; }
+    .number { position:absolute; bottom:8px; left:26px; font-weight:700; color:var(--blue); font-size:14px; }
+    h1,h2,h3,p { margin:0; }
+    h2 { color:var(--navy); font-size:20px; line-height:1.2; }
+    h3 { color:var(--blue); font-size:14px; margin-bottom:8px; text-transform:uppercase; letter-spacing:.4px; }
+    p, li, td, th { font-size:14px; line-height:1.37; }
+    ul { margin:7px 0 0; padding-left:21px; }
+    li { margin:5px 0; }
+    .lead { font-size:17px; line-height:1.42; color:#27364a; }
+    .cover { background:linear-gradient(110deg, #f8fcff 0%, #ffffff 52%, #f0f7fd 100%); }
+    .cover > * { z-index:1; }
+    .cover .leftbar { position:absolute; left:0; top:0; bottom:0; width:18px; background:var(--blue); }
+    .cover .orb { position:absolute; right:-108px; bottom:-130px; width:430px; height:430px; border-radius:50%; border:42px solid #c8e0f3; }
+    .cover .orb2 { position:absolute; right:145px; bottom:111px; width:93px; height:93px; border-radius:50%; background:#e1effa; }
+    .cover .cover-kicker { position:absolute; top:94px; left:65px; font-size:17px; font-weight:700; color:var(--blue); letter-spacing:1.4px; }
+    .cover h1 { position:absolute; top:133px; left:65px; right:575px; color:var(--navy); font-size:28px; line-height:1.22; }
+    .cover .solution-name { position:absolute; top:308px; left:65px; font-size:24px; font-weight:700; color:var(--blue); }
+    .cover .meta { position:absolute; top:366px; left:65px; width:510px; border-left:4px solid var(--red); padding:9px 0 9px 17px; }
+    .cover .meta p { font-size:13px; margin:5px 0; }
+    .cover .meta strong { color:var(--navy); display:inline-block; min-width:173px; }
+    .cover .official { position:absolute; right:59px; top:48px; width:220px; padding:14px 13px; border:1px solid #b9d5eb; color:#37536c; text-align:center; font-weight:800; font-size:16px; line-height:1.25; background:#ffffffb8; }
+    .cover .official span { color:var(--blue); font-size:31px; display:block; margin-top:4px; }
+    .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:29px; height:100%; }
+    .block { padding-left:15px; border-left:3px solid #c8ddec; }
+    .block + .block { margin-top:18px; }
+    .solution-note { background:var(--wash); border:1px solid #d6e7f4; padding:15px 17px; min-height:105px; }
+    .delivery { margin-top:17px; width:100%; border-collapse:collapse; }
+    .delivery caption { caption-side:top; text-align:left; font-size:14px; font-weight:800; color:var(--navy); padding-bottom:7px; }
+    .delivery th { background:var(--blue); color:white; font-size:11.5px; text-align:left; padding:7px 9px; }
+    .delivery td { padding:7px 9px; border:1px solid var(--line); font-size:11.5px; vertical-align:top; }
+    .delivery tr:nth-child(even) td { background:#f7fbff; }
+    .approach { display:grid; grid-template-columns:1.1fr .9fr; gap:35px; }
+    .pipeline { border:1px solid #ccdfed; background:#f9fcff; padding:13px 16px; }
+    .step { padding:8px 10px; margin:6px 0; border-left:4px solid var(--blue); background:white; font-size:13px; }
+    .step strong { color:var(--navy); }
+    .stack { margin-top:13px; display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+    .stack div { padding:9px 10px; border:1px solid var(--line); font-size:12px; background:white; }
+    .feasibility { display:grid; grid-template-columns:1fr 1fr; gap:25px; }
+    .feasibility .wide { grid-column:1 / -1; }
+    .risk { display:grid; grid-template-columns:1.2fr .8fr; gap:11px; padding:8px 0; border-bottom:1px solid #d9e2eb; }
+    .risk:last-child { border:0; }
+    .risk b { color:var(--navy); font-size:13px; }
+    .risk span { font-size:12.5px; }
+    .impact { display:grid; grid-template-columns:1fr 1fr; gap:28px; }
+    .impact .outcome { padding:12px 13px; margin:9px 0; background:#f8fbfe; border-left:4px solid var(--blue); }
+    .impact .outcome strong { color:var(--navy); display:block; font-size:13px; margin-bottom:3px; }
+    .impact .outcome span { font-size:12.5px; }
+    .reference { padding:10px 0 10px 14px; border-left:3px solid #cadfed; margin-bottom:11px; }
+    .reference strong { display:block; color:var(--navy); font-size:14px; margin-bottom:3px; }
+    .reference span { font-size:12px; color:#455468; overflow-wrap:anywhere; }
+    .research-note { margin-top:12px; padding:10px 13px; background:#fff8e8; border-left:4px solid #e3a51a; font-size:12px; }
+    .route-graphic { position:relative; overflow:hidden; background:#dfe9ed; border:1px solid #bfd0da; box-shadow:0 7px 16px #25476620; }
+    .route-graphic::before { content:""; position:absolute; inset:0; background:linear-gradient(21deg, transparent 44%, #fff8 45%, #fff8 48%, transparent 49%), linear-gradient(123deg, transparent 42%, #fff9 43%, #fff9 47%, transparent 48%), linear-gradient(92deg, transparent 34%, #fff7 35%, #fff7 39%, transparent 40%), linear-gradient(0deg, #dce9dc 0 17%, transparent 17% 78%, #d9edf5 78%); opacity:.95; }
+    .route-graphic::after { content:""; position:absolute; inset:0; background-image:linear-gradient(#6f879029 1px, transparent 1px),linear-gradient(90deg, #6f879029 1px, transparent 1px); background-size:32px 32px; }
+    .map-ui { position:absolute; z-index:3; top:9px; left:9px; padding:5px 8px; background:#122033dd; border-radius:5px; color:#fff; font-size:9px; font-weight:700; }
+    .map-chip { position:absolute; z-index:3; top:38px; left:9px; padding:4px 7px; background:#28364ad9; border-radius:4px; color:#dfeeff; font-size:8px; }
+    .route-graphic svg { position:absolute; z-index:2; inset:0; width:100%; height:100%; }
+    .map-node { position:absolute; z-index:4; width:19px; height:19px; border-radius:50%; color:#fff; font-size:9px; font-weight:800; display:flex; align-items:center; justify-content:center; border:2px solid #fff; box-shadow:0 2px 7px #25476680; }
+    .map-depot { background:linear-gradient(135deg,#4f46e5,#7c3aed); border-radius:5px; }
+    .map-purple { background:#8b5cf6; }.map-amber { background:#f59e0b; }.map-green { background:#10b981; }.map-rose { background:#ef4444; }
+    .map-attribution { position:absolute; right:5px; bottom:4px; z-index:3; font-size:7px; color:#405663; background:#ffffffc9; padding:2px 4px; }
+    .cover-map { position:absolute; right:57px; top:168px; width:488px; height:338px; border-radius:12px; }
+    .tech-map { width:100%; height:151px; margin:8px 0 13px; }
+    @media print { body { background:white; } .deck { padding:0; gap:0; } .slide { box-shadow:none; margin:0; break-after:page; } @page { size:13.333in 7.5in; margin:0; } }
+  </style>
+</head>
+<body>
+  <main class="deck">
+    <section class="slide cover">
+      <div class="leftbar"></div><div class="orb"></div><div class="orb2"></div>
+      <div class="official">SMART INDIA HACKATHON<span>2026</span></div>
+      <div class="route-graphic cover-map" aria-label="QuantaFleet route mesh demonstration">
+        <span class="map-ui">⚛ Live Fleet Map</span><span class="map-chip">🕸 20 Route Meshes</span>
+        <svg viewBox="0 0 488 338" aria-hidden="true"><path d="M18 244 C90 202, 96 78, 176 95 S238 230, 310 191 S379 70, 472 65" fill="none" stroke="#6366f1" stroke-width="5" stroke-linecap="round"/><path d="M32 118 C111 142, 152 274, 250 249 S315 97, 451 125" fill="none" stroke="#f59e0b" stroke-width="5" stroke-linecap="round"/><path d="M42 280 C105 252, 145 190, 217 209 S354 277, 455 225" fill="none" stroke="#10b981" stroke-width="5" stroke-linecap="round"/></svg>
+        <span class="map-node map-depot" style="left:35px;top:235px">⌂</span><span class="map-node map-purple" style="left:156px;top:80px">1</span><span class="map-node map-amber" style="left:246px;top:238px">2</span><span class="map-node map-green" style="left:301px;top:179px">3</span><span class="map-node map-rose" style="left:375px;top:67px">4</span><span class="map-node map-purple" style="left:435px;top:111px">5</span>
+        <span class="map-attribution">QuantaFleet map view · © OpenStreetMap</span>
+      </div>
+      <p class="cover-kicker">TITLE PAGE</p>
+      <h1>Quantum-Inspired Intelligent Traffic Route Optimization in Transportation Systems Using Metaheuristic Optimization</h1>
+      <p class="solution-name">QuantaFleet</p>
+      <div class="meta">
+        <p><strong>Problem Statement ID</strong> SIH26137</p>
+        <p><strong>Theme</strong> Transportation &amp; Logistics</p>
+        <p><strong>PS Category</strong> Software</p>
+        <p><strong>Organization</strong> Egreen Quanta</p>
+        <p><strong>Team ID / Team Name</strong> 132918 / Q-bits_26</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="topline"></div><div class="brand">Q-bits_26</div><div class="sih">SMART INDIA HACKATHON<br><b>2026</b></div>
+      <h2 class="title">IDEA TITLE</h2><div class="rule"></div>
+      <div class="content grid2">
+        <div>
+          <div class="solution-note"><h3>Proposed solution</h3><p class="lead">QuantaFleet is a traffic-aware route-planning platform that models the road network as a weighted graph and uses Quantum Particle Swarm Optimization to assign and sequence delivery stops.</p></div>
+          <div class="block" style="margin-top:18px"><h3>How it addresses the problem</h3><ul><li>Updates route costs from simulated or live traffic inputs.</li><li>Optimizes time, distance, congestion exposure and vehicle capacity together.</li><li>Replans affected routes when traffic conditions change.</li></ul></div>
+          <div class="block"><h3>Innovation and uniqueness</h3><ul><li>QPSO maintains a probabilistic search distribution for stronger global exploration.</li><li>A congestion-aware objective converts traffic conditions into route penalties.</li><li>The platform compares QPSO with classical heuristics and exact baselines on the same scenario.</li></ul></div>
+        </div>
+        <div>
+          <table class="delivery"><caption>Delivery Table (Expected Deliverables)</caption><thead><tr><th>Deliverable</th><th>Evidence in platform</th></tr></thead><tbody><tr><td>Graph-based traffic model</td><td>Road graph, edge weights and traffic simulation</td></tr><tr><td>QPSO optimization engine</td><td>Constraint-aware VRP and shortest-path optimizer</td></tr><tr><td>Interactive dashboard</td><td>Map, route comparison, fleet metrics and scenario controls</td></tr><tr><td>Benchmark suite</td><td>Convergence, route cost and execution-time comparison</td></tr><tr><td>Deployment package</td><td>API, web client, documentation and reproducible demo</td></tr></tbody></table>
+        </div>
+      </div>
+      <span class="number">2</span><div class="footer">@SIH Idea submission- Template</div>
+    </section>
+
+    <section class="slide">
+      <div class="topline"></div><div class="brand">Q-bits_26</div><div class="sih">SMART INDIA HACKATHON<br><b>2026</b></div>
+      <h2 class="title">TECHNICAL APPROACH</h2><div class="rule"></div>
+      <div class="content approach">
+        <div><h3>Methodology and implementation process</h3><div class="pipeline"><div class="step"><strong>1. Network ingestion</strong><br>Build a weighted graph from road data, delivery nodes and vehicle constraints.</div><div class="step"><strong>2. Dynamic cost estimation</strong><br>Update edge travel time with simulated traffic, congestion and road-status signals.</div><div class="step"><strong>3. QPSO route search</strong><br>Encode route assignments and stop order, then minimize a penalized VRP objective.</div><div class="step"><strong>4. Constraint repair and validation</strong><br>Enforce capacity, depot, service and route-feasibility rules.</div><div class="step"><strong>5. Benchmark and visualize</strong><br>Compare QPSO against greedy, classical metaheuristic and exact small-instance baselines.</div></div></div>
+        <div><h3>Technologies to be used</h3><div class="route-graphic tech-map" aria-label="QuantaFleet traffic-aware route visualization"><span class="map-ui">⚛ QIO Network Mesh</span><span class="map-chip">Mumbai delivery scenario</span><svg viewBox="0 0 410 151" aria-hidden="true"><path d="M8 108 C80 114, 86 30, 154 42 S212 122, 290 94 S337 25, 400 37" fill="none" stroke="#6366f1" stroke-width="4"/><path d="M16 55 C73 77, 130 127, 211 105 S293 48, 402 70" fill="none" stroke="#f59e0b" stroke-width="4"/><path d="M8 128 C66 105, 116 75, 174 85 S290 135, 400 117" fill="none" stroke="#10b981" stroke-width="4"/></svg><span class="map-node map-depot" style="left:30px;top:96px">⌂</span><span class="map-node map-purple" style="left:142px;top:29px">1</span><span class="map-node map-amber" style="left:209px;top:96px">2</span><span class="map-node map-green" style="left:280px;top:77px">3</span><span class="map-node map-rose" style="left:343px;top:24px">4</span><span class="map-attribution">Leaflet-style route view</span></div><div class="stack"><div><b>Frontend</b><br>React, Vite, Leaflet</div><div><b>Backend</b><br>Python, FastAPI</div><div><b>Optimization</b><br>QPSO, simulated annealing, OR tools</div><div><b>Network model</b><br>OSMnx / NetworkX graph workflows</div><div><b>Data layer</b><br>Traffic simulator and route scenarios</div><div><b>Evaluation</b><br>Convergence and cost metrics</div></div><div class="block" style="margin-top:16px"><h3>Optimization objective</h3><p>Minimize weighted travel time, route distance and congestion cost while applying penalties for capacity violations, unserved stops and infeasible route assignments.</p></div></div>
+      </div>
+      <span class="number">3</span><div class="footer">@SIH Idea submission- Template</div>
+    </section>
+
+    <section class="slide">
+      <div class="topline"></div><div class="brand">Q-bits_26</div><div class="sih">SMART INDIA HACKATHON<br><b>2026</b></div>
+      <h2 class="title">FEASIBILITY AND VIABILITY</h2><div class="rule"></div>
+      <div class="content feasibility">
+        <div><h3>Feasibility of the idea</h3><ul><li>Runs on conventional CPUs, so a quantum computer is not required for the MVP.</li><li>Uses open road-network data and reproducible simulated traffic scenarios during development.</li><li>Uses a modular API so traffic feeds, solvers and visualizations can evolve independently.</li><li>Evaluates exact methods only on small instances and uses heuristics at larger scale.</li></ul></div>
+        <div><h3>Viability for deployment</h3><ul><li>Suitable for urban delivery fleets, municipal mobility control rooms and logistics operators.</li><li>Supports staged rollout: offline planning, simulated live updates, then feed integration.</li><li>Exposes measurable operational outputs before any production integration.</li></ul></div>
+        <div class="wide"><h3>Potential challenges, risks and mitigation</h3><div class="risk"><b>Traffic data quality and availability</b><span>Start with calibrated simulation and retain a fallback travel-time model when a feed is stale.</span></div><div class="risk"><b>Premature convergence in optimization</b><span>Tune QPSO parameters, use diversified initialization and retain a repair-and-restart strategy.</span></div><div class="risk"><b>Large search spaces</b><span>Partition by service zone, limit candidate edges and benchmark scalability by fleet size.</span></div><div class="risk"><b>Route feasibility</b><span>Apply explicit capacity and service constraints, then validate every returned route before display.</span></div></div>
+      </div>
+      <span class="number">4</span><div class="footer">@SIH Idea submission- Template</div>
+    </section>
+
+    <section class="slide">
+      <div class="topline"></div><div class="brand">Q-bits_26</div><div class="sih">SMART INDIA HACKATHON<br><b>2026</b></div>
+      <h2 class="title">IMPACT AND BENEFITS</h2><div class="rule"></div>
+      <div class="content impact">
+        <div><h3>Potential impact on the target audience</h3><div class="outcome"><strong>Fleet operators</strong><span>Compare routing choices using travel time, distance, utilization and congestion exposure before dispatch.</span></div><div class="outcome"><strong>Drivers and dispatchers</strong><span>Receive feasible route plans and revised assignments when a scenario changes.</span></div><div class="outcome"><strong>City and transport planners</strong><span>Test traffic-sensitive logistics scenarios without changing the live road network.</span></div></div>
+        <div><h3>Benefits of the solution</h3><div class="outcome"><strong>Operational</strong><span>Targets lower route cost through traffic-aware stop assignment and ordering.</span></div><div class="outcome"><strong>Economic</strong><span>Supports lower fuel use, overtime and avoidable delivery delays when better routes are selected.</span></div><div class="outcome"><strong>Environmental</strong><span>Helps reduce unnecessary vehicle-kilometres and idling in congested corridors.</span></div><div class="outcome"><strong>Research value</strong><span>Provides a repeatable benchmark for quantum-inspired and conventional optimization methods.</span></div></div>
+      </div>
+      <span class="number">5</span><div class="footer">@SIH Idea submission- Template</div>
+    </section>
+
+    <section class="slide">
+      <div class="topline"></div><div class="brand">Q-bits_26</div><div class="sih">SMART INDIA HACKATHON<br><b>2026</b></div>
+      <h2 class="title">RESEARCH AND REFERENCES</h2><div class="rule"></div>
+      <div class="content">
+        <div class="reference"><strong>Smart India Hackathon 2026 problem statement</strong><span>SIH26137, “Quantum-Inspired Intelligent Traffic Route Optimization in Transportation Systems Using Metaheuristic Optimization”, Egreen Quanta.</span></div>
+        <div class="reference"><strong>Sun, J., Feng, B. and Xu, W. (2004)</strong><span>Particle Swarm Optimization with Particles Having Quantum Behavior. Proceedings of the 2004 Congress on Evolutionary Computation.</span></div>
+        <div class="reference"><strong>Laporte, G. (2009)</strong><span>Fifty Years of Vehicle Routing. Transportation Science, 43(4), 408–416.</span></div>
+        <div class="reference"><strong>OSMnx and OpenStreetMap documentation</strong><span>Graph-based street-network acquisition and analysis for reproducible transportation experiments. https://osmnx.readthedocs.io</span></div>
+        <div class="reference"><strong>Platform validation plan</strong><span>Use identical traffic scenarios to report route cost, constraint violations, convergence behavior and run time for QPSO, classical heuristics and exact small-instance baselines.</span></div>
+        <div class="research-note"><strong>Evidence note:</strong> Performance claims will be reported only after controlled benchmark runs. The demonstration uses simulated traffic until an approved live traffic feed is available.</div>
+      </div>
+      <span class="number">6</span><div class="footer">@SIH Idea submission- Template</div>
+    </section>
+  </main>
+</body>
+</html>
