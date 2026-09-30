@@ -1,8 +1,24 @@
 services:
+  # ----------------------------------------------------------------------------
+  # Service 1: QuantaFleet (SIH26137 - Urban Traffic Route Optimization)
+  # ----------------------------------------------------------------------------
   - type: web
     name: quantafleet
     env: docker
     region: singapore
     plan: free
-    dockerfilePath: ./Dockerfile
-    healthCheckPath: /
+    rootDir: Quantafleet
+    dockerfilePath: Dockerfile
+    healthCheckPath: /api/health
+
+  # ----------------------------------------------------------------------------
+  # Service 2: QuantaGreen (SIH26138 - Green Fleet & Fuel Optimization)
+  # ----------------------------------------------------------------------------
+  - type: web
+    name: quantagreen
+    env: docker
+    region: singapore
+    plan: free
+    rootDir: QuantaGreen
+    dockerfilePath: Dockerfile
+    healthCheckPath: /api/health
