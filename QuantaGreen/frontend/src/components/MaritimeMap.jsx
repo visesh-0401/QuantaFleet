@@ -112,9 +112,15 @@ export default function MaritimeMap({ ports = {}, routes = [], fleet = [], deplo
         style={{ width: '100%', height: '100%', borderRadius: '12px' }}
         scrollWheelZoom={true}
       >
+        {/* High-Resolution Dark Maritime Basemap (No API Key Required) */}
         <TileLayer
-          attribution='&copy; <a href="https://carto.com/">CARTO</a>'
-          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+          attribution='&copy; <a href="https://www.esri.com/">Esri</a> &mdash; Esri, DeLorme, NAVTEQ'
+          url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}"
+          maxZoom={16}
+        />
+        <TileLayer
+          url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}"
+          maxZoom={16}
         />
 
         {/* Shipping Lane Polylines */}
