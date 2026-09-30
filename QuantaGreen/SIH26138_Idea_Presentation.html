@@ -296,6 +296,109 @@
       height: 12px;
       background: linear-gradient(90deg, #0070C0 0%, #1F497D 100%);
     }
+
+    /* Live Prototype & Visual Showcase Styling */
+    .prototype-showcase-card {
+      border: 1.8px solid #0070C0;
+      border-radius: 8px;
+      background: #F0F7FF;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      box-shadow: 0 4px 12px rgba(0, 112, 192, 0.08);
+    }
+
+    .prototype-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .prototype-title {
+      font-size: 11pt;
+      font-weight: bold;
+      color: #1F497D;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .live-status-pill {
+      background: #16a34a;
+      color: #ffffff;
+      font-size: 9pt;
+      font-weight: bold;
+      padding: 2px 8px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      box-shadow: 0 0 6px rgba(22, 163, 74, 0.4);
+    }
+
+    .live-status-dot {
+      width: 6px;
+      height: 6px;
+      background: #ffffff;
+      border-radius: 50%;
+    }
+
+    .prototype-img-container {
+      width: 100%;
+      height: 200px;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid #CBD5E1;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+      margin-bottom: 8px;
+      background: #0f172a;
+    }
+
+    .prototype-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      display: block;
+    }
+
+    .prototype-url-btn {
+      display: block;
+      background: #0070C0;
+      color: #ffffff !important;
+      text-align: center;
+      padding: 6px 12px;
+      border-radius: 5px;
+      font-size: 10pt;
+      font-weight: bold;
+      text-decoration: none;
+      margin-bottom: 8px;
+      transition: background 0.2s;
+    }
+
+    .prototype-url-btn:hover {
+      background: #005691;
+    }
+
+    .prototype-features-list {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      font-size: 9pt;
+      color: #334155;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .prototype-features-list div {
+      line-height: 1.3;
+    }
+
+    .prototype-features-list strong {
+      color: #1F497D;
+    }
   </style>
 </head>
 <body>
@@ -338,6 +441,20 @@
           <td class="field-label">Institute / College-</td>
           <td class="field-value">[Your Institute Name]</td>
         </tr>
+        <tr>
+          <td class="field-label">Live Web Prototype –</td>
+          <td class="field-value">
+            <a href="https://quantagreen.onrender.com/" target="_blank" style="color: #0070C0; font-weight: bold; text-decoration: underline;">https://quantagreen.onrender.com/</a>
+            <span style="display: inline-block; margin-left: 8px; background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 12px; font-size: 9.5pt; font-weight: bold;">● Active Cloud Deployment</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="field-label">Sister Platform –</td>
+          <td class="field-value">
+            <a href="https://quantafleet.onrender.com/" target="_blank" style="color: #0070C0; font-weight: bold; text-decoration: underline;">https://quantafleet.onrender.com/</a>
+            <span style="color: #64748b; font-size: 9.5pt; margin-left: 6px;">(SIH26137 Urban Fleet Traffic QIO Engine)</span>
+          </td>
+        </tr>
       </table>
     </div>
     <div class="title-bottom-accent"></div>
@@ -355,34 +472,48 @@
     </div>
 
     <div class="slide-body">
-      <!-- Detailed explanation -->
-      <div class="pointer-box">
-        <div class="pointer-title">• Detailed explanation of the proposed solution</div>
-        <ul class="content-list">
-          <li><strong>QuantaGreen</strong> is a quantum-inspired predictive decision-support and fleet optimization platform for maritime and intermodal freight logistics.</li>
-          <li>Combines a <strong>non-linear hydrodynamic resistance model</strong> (Admiralty cubic law, Holtrop-Mennen skin friction, engine SFOC curves, and Beaufort weather drag) with a <strong>Quantum-Inspired Annealing metaheuristic</strong>.</li>
-          <li>Simultaneously optimizes: (1) vessel-to-route assignment, (2) cruising speed profile (slow-steaming vs transit deadlines), (3) alternative fuel bunkering (MGO, LNG, Methanol, Ammonia, Hydrogen), and (4) port cold-ironing shore power scheduling to maximize IMO CII ratings.</li>
-        </ul>
-      </div>
+      <div class="grid-2" style="grid-template-columns: 1.15fr 0.85fr; gap: 18px; align-items: stretch; height: 100%;">
+        <!-- Left Column: Detailed Explanation & Uniqueness -->
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div class="pointer-box" style="margin-bottom: 0;">
+            <div class="pointer-title">• Detailed explanation of the proposed solution</div>
+            <ul class="content-list" style="font-size: 10.5pt;">
+              <li><strong>QuantaGreen</strong> is a quantum-inspired predictive decision-support and fleet optimization platform for maritime and intermodal freight logistics.</li>
+              <li>Combines a <strong>non-linear hydrodynamic resistance model</strong> (Admiralty cubic law, Holtrop-Mennen skin friction, engine SFOC curves, and Beaufort weather drag) with a <strong>Quantum-Inspired Annealing metaheuristic</strong>.</li>
+              <li>Simultaneously optimizes: (1) vessel-to-route assignment, (2) cruising speed profile (slow-steaming vs transit deadlines), (3) alternative fuel bunkering (MGO, LNG, Methanol, Ammonia, Hydrogen), and (4) port cold-ironing shore power scheduling to maximize IMO CII ratings.</li>
+            </ul>
+          </div>
 
-      <!-- How it addresses problem & Innovation -->
-      <div class="grid-2">
-        <div class="feature-card">
-          <h4>• How it addresses the problem</h4>
-          <ul class="content-list">
-            <li><strong>Tackles Non-Linear Physics:</strong> Ship propulsion power scales with speed cubed (<span class="math-expr"><i>P</i> ∝ <i>V</i><sup>3</sup></span>), making linear solvers fail. QuantaGreen directly models non-linear load curves.</li>
-            <li><strong>Regulatory & Tax Compliance:</strong> Automatically calculates IMO Carbon Intensity Indicator (CII) grades (A–E) and minimizes EU ETS carbon tax exposure ($75–$150/t).</li>
-            <li><strong>Guarantees Schedule Reliability:</strong> Enforces port arrival time windows while executing optimal slow-steaming.</li>
-          </ul>
+          <div class="feature-card" style="flex: 1;">
+            <h4>• Innovation and uniqueness of the solution</h4>
+            <ul class="content-list" style="font-size: 10pt;">
+              <li><strong>Transverse-Field Quantum Tunneling:</strong> Escapes narrow local energy barriers (<span class="math-expr"><i>P</i><sub>tunnel</sub> = exp(−√(2<i>m</i>Δ<i>E</i>) / ℏΓ)</span>) where classical genetic algorithms stall.</li>
+              <li><strong>Full Well-to-Wake Lifecycle:</strong> Evaluates true lifecycle carbon including 1.8% LNG methane slip and net-zero green e-methanol.</li>
+              <li><strong>Integrated Regulatory Intelligence:</strong> Live IMO MARPOL Annex VI MEPC.337(76) CII grade ratings &amp; EU ETS carbon tax exposure calculations.</li>
+            </ul>
+          </div>
         </div>
 
-        <div class="feature-card">
-          <h4>• Innovation and uniqueness of the solution</h4>
-          <ul class="content-list">
-            <li><strong>Transverse-Field Quantum Tunneling:</strong> Escapes narrow local energy barriers (<span class="math-expr"><i>P</i><sub>tunnel</sub> = exp(−√(2<i>m</i>Δ<i>E</i>) / ℏΓ)</span>) where classical genetic algorithms stall.</li>
-            <li><strong>Full Well-to-Wake Lifecycle:</strong> Evaluates true lifecycle carbon including 1.8% LNG methane slip and net-zero green e-methanol.</li>
-            <li><strong>Production Clean-Tech Platform:</strong> Live command dashboard on Indian Ocean sea lanes (JNPT, Kochi, Colombo, Chennai, Vizag, Kolkata).</li>
-          </ul>
+        <!-- Right Column: Live Working Prototype Visual & Links -->
+        <div class="prototype-showcase-card">
+          <div class="prototype-header">
+            <span class="prototype-title">Live Working Prototype Showcase</span>
+            <span class="live-status-pill"><span class="live-status-dot"></span> LIVE ONLINE</span>
+          </div>
+
+          <div class="prototype-img-container">
+            <img src="assets/quantagreen_live_ui.png" alt="QuantaGreen Live Working Dashboard" class="prototype-img">
+          </div>
+
+          <a href="https://quantagreen.onrender.com/" target="_blank" class="prototype-url-btn">
+            🔗 Experience Live: https://quantagreen.onrender.com/
+          </a>
+
+          <div class="prototype-features-list">
+            <div>• <strong>Maritime Digital Twin:</strong> Indian Ocean corridors (JNPT, Colombo, Chennai, Vizag, Kolkata) with live sea states.</div>
+            <div>• <strong>Multi-Fuel Decarbonization:</strong> Real-time WTW carbon accounting across 6 alternative fuels.</div>
+            <div>• <strong>Sister Platform Online:</strong> Urban traffic route optimizer at <a href="https://quantafleet.onrender.com/" target="_blank" style="color:#0070C0; font-weight:bold; text-decoration:underline;">quantafleet.onrender.com</a></div>
+          </div>
         </div>
       </div>
     </div>
@@ -476,9 +607,9 @@
       <div class="pointer-box">
         <div class="pointer-title">• Analysis of the feasibility of the idea</div>
         <ul class="content-list">
-          <li><strong>Working Production Prototype:</strong> Fully operational software running live on port 5174, tested across 7 major shipping routes (JNPT, Kochi, Colombo, Chennai, Vizag, Kolkata, Dubai, Singapore).</li>
+          <li><strong>Working Production Prototype &amp; Live Deployment:</strong> Fully operational software running live at <a href="https://quantagreen.onrender.com/" target="_blank" style="color: #0070C0; font-weight: bold; text-decoration: underline;">https://quantagreen.onrender.com/</a>, tested across 7 major shipping routes (JNPT, Kochi, Colombo, Chennai, Vizag, Kolkata, Dubai, Singapore).</li>
           <li><strong>Direct Maritime Regulatory Alignment:</strong> Follows IMO MEPC.337(76) MARPOL Annex VI formulas directly, making outputs immediately usable for fleet ESG and compliance filings.</li>
-          <li><strong>Commercial Port Infrastructure Integration:</strong> Tracks cold-ironing shore power availability at major Indian port terminals to eliminate berthed auxiliary generator emissions.</li>
+          <li><strong>Commercial Port Infrastructure Integration:</strong> Tracks cold-ironing shore power availability at major Indian port terminals to eliminate berthed auxiliary generator emissions. (Sister urban fleet system: <a href="https://quantafleet.onrender.com/" target="_blank" style="color: #0070C0; font-weight: bold; text-decoration: underline;">https://quantafleet.onrender.com/</a>)</li>
         </ul>
       </div>
 

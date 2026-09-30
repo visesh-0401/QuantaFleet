@@ -296,6 +296,109 @@
       height: 12px;
       background: linear-gradient(90deg, #0070C0 0%, #1F497D 100%);
     }
+
+    /* Live Prototype & Visual Showcase Styling */
+    .prototype-showcase-card {
+      border: 1.8px solid #0070C0;
+      border-radius: 8px;
+      background: #F0F7FF;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      box-shadow: 0 4px 12px rgba(0, 112, 192, 0.08);
+    }
+
+    .prototype-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .prototype-title {
+      font-size: 11pt;
+      font-weight: bold;
+      color: #1F497D;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .live-status-pill {
+      background: #16a34a;
+      color: #ffffff;
+      font-size: 9pt;
+      font-weight: bold;
+      padding: 2px 8px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      box-shadow: 0 0 6px rgba(22, 163, 74, 0.4);
+    }
+
+    .live-status-dot {
+      width: 6px;
+      height: 6px;
+      background: #ffffff;
+      border-radius: 50%;
+    }
+
+    .prototype-img-container {
+      width: 100%;
+      height: 200px;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid #CBD5E1;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+      margin-bottom: 8px;
+      background: #0f172a;
+    }
+
+    .prototype-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      display: block;
+    }
+
+    .prototype-url-btn {
+      display: block;
+      background: #0070C0;
+      color: #ffffff !important;
+      text-align: center;
+      padding: 6px 12px;
+      border-radius: 5px;
+      font-size: 10pt;
+      font-weight: bold;
+      text-decoration: none;
+      margin-bottom: 8px;
+      transition: background 0.2s;
+    }
+
+    .prototype-url-btn:hover {
+      background: #005691;
+    }
+
+    .prototype-features-list {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      font-size: 9pt;
+      color: #334155;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .prototype-features-list div {
+      line-height: 1.3;
+    }
+
+    .prototype-features-list strong {
+      color: #1F497D;
+    }
   </style>
 </head>
 <body>
@@ -338,6 +441,20 @@
           <td class="field-label">Institute / College-</td>
           <td class="field-value">[Your Institute Name]</td>
         </tr>
+        <tr>
+          <td class="field-label">Live Web Prototype –</td>
+          <td class="field-value">
+            <a href="https://quantafleet.onrender.com/" target="_blank" style="color: #0070C0; font-weight: bold; text-decoration: underline;">https://quantafleet.onrender.com/</a>
+            <span style="display: inline-block; margin-left: 8px; background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 12px; font-size: 9.5pt; font-weight: bold;">● Active Cloud Deployment</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="field-label">Sister Platform –</td>
+          <td class="field-value">
+            <a href="https://quantagreen.onrender.com/" target="_blank" style="color: #0070C0; font-weight: bold; text-decoration: underline;">https://quantagreen.onrender.com/</a>
+            <span style="color: #64748b; font-size: 9.5pt; margin-left: 6px;">(SIH26138 Maritime Green Corridor &amp; Fuel Optimizer)</span>
+          </td>
+        </tr>
       </table>
     </div>
     <div class="title-bottom-accent"></div>
@@ -355,34 +472,48 @@
     </div>
 
     <div class="slide-body">
-      <!-- Detailed explanation -->
-      <div class="pointer-box">
-        <div class="pointer-title">• Detailed explanation of the proposed solution</div>
-        <ul class="content-list">
-          <li><strong>QuantaFleet</strong> is a full-stack, quantum-inspired intelligent route optimization platform designed to solve the NP-hard Capacitated Vehicle Routing Problem (CVRP) in large-scale urban transportation networks.</li>
-          <li>Ingests real OpenStreetMap (OSMNx) street topology (6,552 road intersections across Mumbai) and dynamically overlays simulated real-time traffic speeds and congestion factors on graph edges.</li>
-          <li>Formulates multi-vehicle routing as a Quadratic Unconstrained Binary Optimization (QUBO) Hamiltonian and executes a simulated quantum annealing metaheuristic with quantum tunneling to generate global near-optimal vehicle paths.</li>
-        </ul>
-      </div>
+      <div class="grid-2" style="grid-template-columns: 1.15fr 0.85fr; gap: 18px; align-items: stretch; height: 100%;">
+        <!-- Left Column: Detailed Explanation & Uniqueness -->
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div class="pointer-box" style="margin-bottom: 0;">
+            <div class="pointer-title">• Detailed explanation of the proposed solution</div>
+            <ul class="content-list" style="font-size: 10.5pt;">
+              <li><strong>QuantaFleet</strong> is a full-stack, quantum-inspired intelligent route optimization platform designed to solve the NP-hard Capacitated Vehicle Routing Problem (CVRP) in large-scale urban transportation networks.</li>
+              <li>Ingests real OpenStreetMap (OSMNx) street topology (6,552 road intersections across Mumbai) and dynamically overlays simulated real-time traffic speeds and congestion factors on graph edges.</li>
+              <li>Formulates multi-vehicle routing as a Quadratic Unconstrained Binary Optimization (QUBO) Hamiltonian and executes a simulated quantum annealing metaheuristic with quantum tunneling to generate global near-optimal vehicle paths.</li>
+            </ul>
+          </div>
 
-      <!-- How it addresses problem & Innovation -->
-      <div class="grid-2">
-        <div class="feature-card">
-          <h4>• How it addresses the problem</h4>
-          <ul class="content-list">
-            <li><strong>Eliminates Static Shortest-Path Failures:</strong> Replaces pure distance (Dijkstra) with dynamic travel-time weights (<span class="math-expr"><i>T</i><sub>ij</sub> = (Length / <i>v</i><sub>speed</sub>) × Congestion_Factor</span>).</li>
-            <li><strong>Scales Past Classical Limits:</strong> Classical solvers take hours on large fleets; QuantaFleet optimizes 80-node instances in <strong>&lt; 450 ms</strong>.</li>
-            <li><strong>Dynamic Re-Routing:</strong> Instant partial re-routing for active vehicles when unexpected rush-hour bottlenecks occur.</li>
-          </ul>
+          <div class="feature-card" style="flex: 1;">
+            <h4>• Innovation and uniqueness of the solution</h4>
+            <ul class="content-list" style="font-size: 10pt;">
+              <li><strong>Quantum Tunneling Metaheuristic:</strong> Simulates transverse-field quantum tunneling (<span class="math-expr"><i>P</i><sub>tunnel</sub> = exp(−√(2<i>m</i>Δ<i>E</i>) / ℏΓ)</span>) allowing the solver to escape deep local minima where classical greedy/GA algorithms get stuck.</li>
+              <li><strong>Sub-Second Optimization Speed:</strong> Optimizes 80-node delivery instances in <strong>&lt; 450 ms</strong> with real-time dynamic re-routing for unexpected bottlenecks.</li>
+              <li><strong>NISQ &amp; Cloud Ready:</strong> Deployed live on cloud today, with direct dispatch compatibility to AWS Braket and D-Wave QPUs.</li>
+            </ul>
+          </div>
         </div>
 
-        <div class="feature-card">
-          <h4>• Innovation and uniqueness of the solution</h4>
-          <ul class="content-list">
-            <li><strong>Quantum Tunneling Metaheuristic:</strong> Simulates transverse-field quantum tunneling (<span class="math-expr"><i>P</i><sub>tunnel</sub> = exp(−√(2<i>m</i>Δ<i>E</i>) / ℏΓ)</span>) allowing the solver to escape deep local minima where classical greedy/GA algorithms get stuck.</li>
-            <li><strong>Live Road Congestion Heatmap:</strong> Real-time visual overlay on interactive Leaflet maps with dynamic vehicle stop ETA timelines.</li>
-            <li><strong>NISQ-Ready:</strong> Production software today on classical cloud, with direct dispatch compatibility to AWS Braket and D-Wave QPUs.</li>
-          </ul>
+        <!-- Right Column: Live Working Prototype Visual & Links -->
+        <div class="prototype-showcase-card">
+          <div class="prototype-header">
+            <span class="prototype-title">Live Working Prototype Showcase</span>
+            <span class="live-status-pill"><span class="live-status-dot"></span> LIVE ONLINE</span>
+          </div>
+
+          <div class="prototype-img-container">
+            <img src="assets/quantafleet_live_ui.png" alt="QuantaFleet Live Working Dashboard" class="prototype-img">
+          </div>
+
+          <a href="https://quantafleet.onrender.com/" target="_blank" class="prototype-url-btn">
+            🔗 Experience Live: https://quantafleet.onrender.com/
+          </a>
+
+          <div class="prototype-features-list">
+            <div>• <strong>Real Mumbai Topology:</strong> 6,552 road intersections with dynamic traffic rush-hour simulation.</div>
+            <div>• <strong>Interactive Leaflet Map:</strong> Real-time animated vehicle delivery routes and road congestion heatmaps.</div>
+            <div>• <strong>Sister Platform Online:</strong> Maritime Green Fleet optimizer at <a href="https://quantagreen.onrender.com/" target="_blank" style="color:#0070C0; font-weight:bold; text-decoration:underline;">quantagreen.onrender.com</a></div>
+          </div>
         </div>
       </div>
     </div>
@@ -476,9 +607,9 @@
       <div class="pointer-box">
         <div class="pointer-title">• Analysis of the feasibility of the idea</div>
         <ul class="content-list">
-          <li><strong>Technically Proven:</strong> A functioning end-to-end prototype is already implemented and running live with 6,552 real Mumbai road network nodes, delivering validated route solutions in under 450 ms.</li>
+          <li><strong>Technically Proven &amp; Live:</strong> A functioning end-to-end prototype is already implemented and running live at <a href="https://quantafleet.onrender.com/" target="_blank" style="color: #0070C0; font-weight: bold; text-decoration: underline;">https://quantafleet.onrender.com/</a> with 6,552 real Mumbai road network nodes, delivering validated route solutions in under 450 ms.</li>
           <li><strong>Zero Cost Barrier to Entry:</strong> Built on open-source frameworks (FastAPI, React, OSMNx, NetworkX). Runs on standard cloud virtual machines without requiring expensive physical cryogenic quantum hardware today.</li>
-          <li><strong>Seamless Enterprise Integration:</strong> Clean REST APIs allow turnkey integration into existing TMS (Transportation Management Systems), ERPs (SAP/Oracle), and driver mobile applications.</li>
+          <li><strong>Seamless Enterprise Integration:</strong> Clean REST APIs allow turnkey integration into existing TMS (Transportation Management Systems), ERPs (SAP/Oracle), and driver mobile applications. (Sister maritime platform: <a href="https://quantagreen.onrender.com/" target="_blank" style="color: #0070C0; font-weight: bold; text-decoration: underline;">https://quantagreen.onrender.com/</a>)</li>
         </ul>
       </div>
 
